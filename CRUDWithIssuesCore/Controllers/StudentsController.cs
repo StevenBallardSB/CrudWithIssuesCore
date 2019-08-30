@@ -16,25 +16,25 @@ namespace CRUDWithIssuesCore.Controllers
             context = dbContext;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            List<Student> products = StudentDb.GetStudents(context);
+            List<Student> products = await StudentDb.GetStudents(context);
             return View(products);
         }
 
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Create(Student p)
+        public async Task<IActionResult> Create(Student p)
         {
             if (ModelState.IsValid)
             {
-                StudentDb.Add(p, context);
-                ViewData["Message"] = $"{p.Name} was added!";
-                return View(p);
+                await StudentDb.Add(p, context);
+                return RedirectToAction("Index");
             }
 
             //Show web page with errors

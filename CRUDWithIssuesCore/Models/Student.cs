@@ -8,11 +8,6 @@ namespace CRUDWithIssuesCore.Models
 {
     public class Student
     {
-        public Student()
-        {
-
-        }
-
         [Key]
         public int StudentId { get; set; }
 

@@ -8,19 +8,19 @@ namespace CRUDWithIssuesCore.Models
 {
     public static class StudentDb
     {
-        public static Student Add(Student p, SchoolContext db)
+        public static async Task<Student> Add(Student p, SchoolContext db)
         {
             //Add student to context
-            db.Students.Add(p);
-            db.SaveChanges();
+            await db.AddAsync(p);
+            await db.SaveChangesAsync();
             return p;
 
         }
 
-        public static List<Student> GetStudents(SchoolContext context)
+        public static async Task<List<Student>> GetStudents(SchoolContext context)
         {
-            return (from s in context.Students
-                    select s).ToList();
+            List<Student> students = await context.Students.OrderBy(s => s.Name).ToListAsync();
+            return students;
         }
 
         public static Student GetStudent(SchoolContext context, int id)
