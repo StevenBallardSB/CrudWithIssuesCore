@@ -23,32 +23,34 @@ namespace CRUDWithIssuesCore.Models
             return students;
         }
 
-        public static Student GetStudent(SchoolContext context, int id)
+        public static async Task<Student> GetStudent(SchoolContext context, int id)
         {
-            Student p = context
+            Student p = await context
                             .Students
                             .Where(s => s.StudentId == id)
-                            .SingleOrDefault();
+                            .SingleOrDefaultAsync();
             return p;
         }
 
-        public static void Delete(SchoolContext context, Student p)
+        public static async Task DeleteById(int id, SchoolContext context)
         {
 
             //Mark the object as deleted
             Student s = new Student()
             {
-                StudentId = p.StudentId
+                StudentId = id
             };
             context.Entry(s).State = EntityState.Deleted;
 
             //Send delete query to database
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public static void Update(SchoolContext context, Student p)
+        public static async Task<Student> UpdateStudent(Student p, SchoolContext context)
         {
-            context.Students.Update(p);
+            context.Update(p);
+            await context.SaveChangesAsync();
+            return p;
         }
     }
 }
